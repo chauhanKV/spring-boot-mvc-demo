@@ -9,8 +9,9 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Component
 public class ValueDemo {
-    @Value("${product.url}")
+    @Value("${product.site}")
     private String productURL;
 
     public String getValue()

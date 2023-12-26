@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class ProductService {
 
     List<Products> productList = new ArrayList<>();
+    private AtomicLong nextID = new AtomicLong(0);
 
     @Autowired
     private ValueDemo valueDemo;
@@ -31,7 +33,27 @@ public class ProductService {
     public void initMethod()
     {
         // This is the part of lifeCycle of this bean
-        productList.add(new Products("Product1", 32423.345));
-        productList.add(new Products("Product2", 3463.476));
+        productList.add(new Products(nextID.incrementAndGet(), "Product1", 32423.345));
+        productList.add(new Products(nextID.incrementAndGet(),"Product2", 3463.476));
+    }
+
+    public Products getProduct(Long ID)
+    {
+        Products result = null;
+        for(Products prod : productList)
+        {
+            if(prod.getID() == ID)
+            {
+                result = prod;
+            }
+        }
+        return result;
+    }
+
+    public Products addProduct(Products product)
+    {
+        product.setID(nextID.incrementAndGet());
+        productList.add(product);
+        return product;
     }
 }
